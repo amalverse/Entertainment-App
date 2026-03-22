@@ -3,6 +3,7 @@ const generateToken = require("../config/jwt");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 const { OAuth2Client } = require("google-auth-library");
+const { generateUniqueUsername, cleanUsername } = require("../utils/generateUsername");
 
 /*
  * Register a new user.
@@ -16,16 +17,24 @@ const registerUser = async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  const userExists = await User.findOne({ email });
-  if (userExists) {
+  const userWithEmail = await User.findOne({ email });
+  if (userWithEmail) {
     return res.status(400).json({ message: "User already exists" });
+  }
+
+  // Clean and check username
+  const cleanedUsername = cleanUsername(username);
+
+  const userWithUsername = await User.findOne({ username: cleanedUsername });
+  if (userWithUsername) {
+    return res.status(400).json({ message: "Username already taken" });
   }
 
   // Generate verification token (expires in 24h)
   const verificationToken = crypto.randomBytes(20).toString("hex");
 
   const user = await User.create({
-    username,
+    username: cleanedUsername,
     email,
     password,
     verificationToken,
@@ -160,11 +169,12 @@ const googleLogin = async (req, res) => {
       user.isVerified = true;
       await user.save();
     } else {
-      // Create new user with random password
+      // Create new user with unique username generated from name
       const randomPassword = crypto.randomBytes(16).toString("hex");
+      const uniqueUsername = await generateUniqueUsername(name);
 
       user = await User.create({
-        username: name,
+        username: uniqueUsername,
         email,
         password: randomPassword,
         googleId,

@@ -6,6 +6,9 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
     },
     name: {
       type: String,
@@ -75,8 +78,13 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-// Hash password before saving if modified
+// Hash password before saving if modified and clean username
 userSchema.pre("save", async function () {
+  // Clean username: remove all spaces
+  if (this.isModified("username")) {
+    this.username = this.username.replace(/\s+/g, "").toLowerCase();
+  }
+
   if (!this.isModified("password")) return;
 
   const salt = await bcrypt.genSalt(10);
