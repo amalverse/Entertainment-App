@@ -1,4 +1,4 @@
-# 🎬 Entertainment App
+# 🎬 BingeHub.app
 
 A full-stack web application for discovering, searching, and bookmarking movies and TV shows. Browse trending content from TMDB (The Movie Database), manage your watchlist, and explore comprehensive details with a modern, responsive interface.
 
@@ -27,9 +27,9 @@ A full-stack web application for discovering, searching, and bookmarking movies 
 
 ## 🎯 Overview
 
-Entertainment App is a modern entertainment discovery platform that leverages the power of TMDB API to provide users with access to thousands of movies and TV shows. The application features secure user authentication (both traditional and OAuth), personalized bookmarks, advanced search capabilities, and a beautiful responsive UI built with React and Tailwind CSS.
+BingeHub.app is a modern entertainment discovery platform that leverages the power of TMDB API to provide users with access to thousands of movies and TV shows. The application features secure user authentication (both traditional and OAuth), personalized bookmarks, advanced search capabilities, and a beautiful responsive UI built with React and Tailwind CSS.
 
-Whether you're looking to discover trending content, search for specific titles, or maintain a personalized watchlist, Entertainment App provides an intuitive and engaging experience.
+Whether you're looking to discover trending content, search for specific titles, or maintain a personalized watchlist, BingeHub.app provides an intuitive and engaging experience.
 
 ## ⭐ Features
 
@@ -176,8 +176,8 @@ Ensure you have the following installed on your system:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/entertainment-app.git
-cd entertainment-app
+git clone https://github.com/yourusername/bingehub.app.git
+cd bingehub.app
 ```
 
 ### 2. Install Backend Dependencies
@@ -206,7 +206,7 @@ PORT=5000
 NODE_ENV=development
 
 # Database Configuration
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/entertainment-app
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/bingehub-app
 
 # JWT Configuration
 JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
@@ -215,7 +215,7 @@ JWT_EXPIRE=7d
 # Gmail Configuration (for email verification)
 EMAIL_USER=your-email@gmail.com
 EMAIL_PASSWORD=your-app-specific-password
-EMAIL_FROM=noreply@entertainmentapp.com
+EMAIL_FROM=noreply@bingehub.app
 
 # Google OAuth Configuration
 GOOGLE_CLIENT_ID=your_google_client_id

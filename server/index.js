@@ -58,7 +58,7 @@ if (process.env.NODE_ENV !== "production") {
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "Entertainment App API Server is running! 🚀",
+    message: "BingeHub.app API Server is running! 🚀",
     version: "1.0.0",
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || "development",

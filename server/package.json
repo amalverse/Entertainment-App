@@ -1,7 +1,7 @@
 {
-  "name": "entertainment-app",
+  "name": "bingehub.app",
   "version": "1.0.0",
-  "description": "Backend for Entertainment app",
+  "description": "Backend for BingeHub.app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

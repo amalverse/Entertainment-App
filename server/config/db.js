@@ -19,7 +19,7 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
     // Attempt to connect to MongoDB using connection string from .env file
-    // MONGO_URI looks like: mongodb://localhost:27017/entertainment-app
+    // MONGO_URI looks like: mongodb://localhost:27017/bingehub-app
     // or for MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/dbname
     await mongoose.connect(process.env.MONGO_URI);
 

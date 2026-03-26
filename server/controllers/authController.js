@@ -45,7 +45,7 @@ const registerUser = async (req, res) => {
 
   const htmlMessage = `
     <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-      <h1 style="color: #e50914;">Welcome to Entertainment App!</h1>
+      <h1 style="color: #e50914;">Welcome to BingeHub.app!</h1>
       <p>Thank you for signing up. Please verify your email address to get started:</p>
       <a href="${frontendVerifyUrl}" style="display: inline-block; padding: 10px 20px; background-color: #e50914; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0;">Verify My Email</a>
       <p>Or copy this link: <br/> ${frontendVerifyUrl}</p>
@@ -56,7 +56,7 @@ const registerUser = async (req, res) => {
   try {
     await sendEmail({
       email: user.email,
-      subject: "Entertainment App - Email Verification",
+      subject: "BingeHub.app - Email Verification",
       message: htmlMessage,
     });
 
@@ -240,7 +240,7 @@ const forgotPassword = async (req, res) => {
 
     await sendEmail({
       email: user.email,
-      subject: "Entertainment App - Password Reset",
+      subject: "BingeHub.app - Password Reset",
       message: htmlMessage,
     });
 

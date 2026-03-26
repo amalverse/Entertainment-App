@@ -12,7 +12,7 @@ const sendEmail = async (options) => {
 
   // Define email options
   const mailOptions = {
-    from: `"Entertainment App" <${process.env.EMAIL_USER}>`,
+    from: `"BingeHub.app" <${process.env.EMAIL_USER}>`,
     to: options.email,
     subject: options.subject,
     html: options.message,
