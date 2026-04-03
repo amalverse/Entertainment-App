@@ -7,6 +7,7 @@ import {
 } from "../redux/features/auth/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
 
 // User registration page
 const Register = () => {
@@ -30,9 +31,10 @@ const Register = () => {
     try {
       await dispatch(registerUser({ username, email, password })).unwrap();
       setSuccess(true);
-      setUsername("");
-      setEmail("");
-      setPassword("");
+      toast.success("Please check your email to verify your account!", {
+        theme: "dark",
+      });
+      // Do not clear the email state so it can be displayed in the success view
     } catch {
       // Error handled by redux
     }
