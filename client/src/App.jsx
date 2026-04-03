@@ -34,7 +34,9 @@ const App = () => {
     location.pathname.startsWith("/verify-email");
 
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider
+      clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "fallback_client_id"}
+    >
       {/* 
         Flex container for the sidebar + main content layout.
         Sidebar hidden on auth pages.
@@ -44,7 +46,9 @@ const App = () => {
 
         <main
           ref={scrollRef}
-          className="flex-1 overflow-y-auto relative p-6 md:p-8 lg:p-10"
+          className={`flex-1 overflow-y-auto relative ${
+            isAuthPage ? "" : "p-6 md:p-8 lg:p-10"
+          }`}
         >
           <AppRoutes />
         </main>
