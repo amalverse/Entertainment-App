@@ -16,7 +16,7 @@ const App = () => {
   const location = useLocation();
   const scrollRef = useRef(null);
 
-  const { user, token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   // Sync auth state and fetch user data on load or login
   useEffect(() => {
