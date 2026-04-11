@@ -28,10 +28,10 @@ const TVDetails = () => {
   const watchedList = useSelector((state) => state.watched.items);
 
   const isBookmarked = bookmarks.some(
-    (b) => b.tmdbId === Number(id) && b.type === "tv"
+    (b) => Number(b.tmdbId) === Number(id) && b.type === "tv"
   );
   const isWatched = watchedList.some(
-    (b) => b.tmdbId === Number(id) && b.type === "tv"
+    (b) => Number(b.tmdbId) === Number(id) && b.type === "tv"
   );
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const TVDetails = () => {
     
     if (isBookmarked) {
       const bookmark = bookmarks.find(
-        (b) => b.tmdbId === Number(id) && b.type === "tv"
+        (b) => Number(b.tmdbId) === Number(id) && b.type === "tv"
       );
       if (bookmark) dispatch(removeBookmark(bookmark._id));
     } else {
@@ -77,7 +77,7 @@ const TVDetails = () => {
     
     if (isWatched) {
       const watched = watchedList.find(
-        (b) => b.tmdbId === Number(id) && b.type === "tv"
+        (b) => Number(b.tmdbId) === Number(id) && b.type === "tv"
       );
       if (watched) dispatch(removeWatched(watched._id));
     } else {
