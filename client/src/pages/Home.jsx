@@ -54,13 +54,6 @@ const Home = () => {
 
   const isLoading = moviesLoading || tvLoading;
 
-  useEffect(() => {
-    console.log("Home State Debug:", {
-      movies: movies.length,
-      tv: tvShows.length,
-      loading: isLoading,
-    });
-  }, [movies, tvShows, isLoading]);
 
   const scrollLeft = () => {
     if (trendingRef.current) {

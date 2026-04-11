@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { restoreAuth } from "./redux/features/auth/authSlice";
+import { restoreAuth, logout } from "./redux/features/auth/authSlice";
 import { fetchWatched } from "./redux/features/watched/watchedSlice";
 import { fetchBookmarks } from "./redux/features/bookmarks/bookmarksSlice";
 import AppRoutes from "./routes/appRoutes";
@@ -17,6 +17,15 @@ const App = () => {
   const scrollRef = useRef(null);
 
   const { token } = useSelector((state) => state.auth);
+
+  // Handle global auth errors (401 from API)
+  useEffect(() => {
+    const handleAuthError = () => {
+      dispatch(logout());
+    };
+    window.addEventListener("auth-error", handleAuthError);
+    return () => window.removeEventListener("auth-error", handleAuthError);
+  }, [dispatch]);
 
   // Sync auth state and fetch user data on load or login
   useEffect(() => {
