@@ -82,6 +82,26 @@ const swaggerDefinition = {
           poster: { type: "string", example: "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" },
         },
       },
+      Watched: {
+        type: "object",
+        properties: {
+          tmdbId: { type: "integer", example: 550 },
+          type: { type: "string", example: "movie" },
+          title: { type: "string", example: "Fight Club" },
+          poster: { type: "string", example: "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" },
+          dateAdded: { type: "string", format: "date-time", example: "2023-01-01T00:00:00.000Z" },
+        },
+      },
+      WatchedRequest: {
+        type: "object",
+        required: ["tmdbId", "type", "title", "poster"],
+        properties: {
+          tmdbId: { type: "integer", example: 550 },
+          type: { type: "string", example: "movie" },
+          title: { type: "string", example: "Fight Club" },
+          poster: { type: "string", example: "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" },
+        },
+      },
       UserProfile: {
         type: "object",
         properties: {
@@ -92,6 +112,10 @@ const swaggerDefinition = {
           bookmarks: {
             type: "array",
             items: { $ref: "#/components/schemas/Bookmark" },
+          },
+          watched: {
+            type: "array",
+            items: { $ref: "#/components/schemas/Watched" },
           },
         },
       },
@@ -106,6 +130,7 @@ const swaggerDefinition = {
     { name: "Auth", description: "Authentication operations" },
     { name: "Bookmarks", description: "Bookmark management" },
     { name: "User", description: "User profile operations" },
+    { name: "Watched", description: "Watched content management" },
   ],
   paths: {
     "/api/auth/register": {
@@ -314,6 +339,66 @@ const swaggerDefinition = {
         ],
         responses: {
           200: { description: "Bookmark removed successfully" },
+        },
+      },
+    },
+    "/api/watched": {
+      get: {
+        tags: ["Watched"],
+        summary: "Get all watched items for the authenticated user",
+        security: [{ bearerAuth: [] }],
+        responses: {
+          200: {
+            description: "Watched list returned successfully",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    watched: {
+                      type: "array",
+                      items: { $ref: "#/components/schemas/Watched" },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        tags: ["Watched"],
+        summary: "Mark an item as watched for the authenticated user",
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/WatchedRequest" },
+            },
+          },
+        },
+        responses: {
+          200: { description: "Item marked as watched successfully" },
+        },
+      },
+    },
+    "/api/watched/{id}": {
+      delete: {
+        tags: ["Watched"],
+        summary: "Remove an item from watched list",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "ID of the watched item to remove",
+          },
+        ],
+        responses: {
+          200: { description: "Item removed from watched list successfully" },
         },
       },
     },
