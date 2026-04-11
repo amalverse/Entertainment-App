@@ -53,7 +53,12 @@ const bookmarksSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    clearBookmarks: (state) => {
+      state.items = [];
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Fetching
@@ -92,4 +97,5 @@ const bookmarksSlice = createSlice({
   },
 });
 
+export const { clearBookmarks } = bookmarksSlice.actions;
 export default bookmarksSlice.reducer;

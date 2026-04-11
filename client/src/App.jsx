@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { restoreAuth } from "./redux/features/auth/authSlice";
+import { fetchWatched } from "./redux/features/watched/watchedSlice";
+import { fetchBookmarks } from "./redux/features/bookmarks/bookmarksSlice";
 import AppRoutes from "./routes/appRoutes";
 import Sidebar from "./components/layout/Sidebar";
 import { ToastContainer } from "react-toastify";
@@ -17,6 +19,12 @@ const App = () => {
   // Keep user logged in on refresh
   useEffect(() => {
     dispatch(restoreAuth());
+    
+    // If we have a token, fetch user-specific data
+    if (localStorage.getItem("token")) {
+      dispatch(fetchWatched());
+      dispatch(fetchBookmarks());
+    }
   }, [dispatch]);
 
   // Reset scroll to top when changing pages

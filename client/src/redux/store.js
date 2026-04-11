@@ -3,6 +3,7 @@ import authReducer from "./features/auth/authSlice";
 import moviesReducer from "./features/movies/moviesSlice";
 import tvReducer from "./features/tv/tvSlice";
 import bookmarksReducer from "./features/bookmarks/bookmarksSlice";
+import watchedReducer from "./features/watched/watchedSlice";
 import searchReducer from "./features/search/searchSlice";
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     movies: moviesReducer,
     tv: tvReducer,
     bookmarks: bookmarksReducer,
+    watched: watchedReducer,
     search: searchReducer,
   },
 });

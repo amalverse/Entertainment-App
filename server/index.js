@@ -8,7 +8,9 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const swaggerUi = require("swagger-ui-express");
 const connectDB = require("./config/db");
+const { getSwaggerSpec } = require("./swagger");
 require("dotenv").config(); // Load environment variables from .env file
 
 // Create Express application instance
@@ -66,6 +68,7 @@ app.get("/", (req, res) => {
       auth: "/api/auth (POST /register, /login, /verify-email)",
       bookmarks: "/api/bookmarks (GET, POST, DELETE)",
       user: "/api/user (GET /profile, PUT /profile, DELETE /profile)",
+      docs: "/api-docs",
     },
   });
 });
@@ -76,8 +79,27 @@ app.use("/api/auth", require("./routes/authRoutes"));
 // Bookmark routes: save/remove favorite movies/shows
 app.use("/api/bookmarks", require("./routes/bookmarkRoutes"));
 
+// Watched list routes: mark/remove watched movies/shows
+app.use("/api/watched", require("./routes/watchedRoutes"));
+
 // User profile routes: view/update/delete profile
 app.use("/api/user", require("./routes/userRoutes"));
+
+// Swagger API documentation
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(null, {
+    swaggerOptions: {
+      url: "/api-docs.json",
+    },
+  }),
+);
+app.get("/api-docs.json", (req, res) => {
+  const requestUrl = `${req.protocol}://${req.get("host")}`;
+  const baseUrl = process.env.BACKEND_URL?.replace(/\/+$/, "") || requestUrl;
+  res.json(getSwaggerSpec(baseUrl));
+});
 
 /* ========================================
    ERROR HANDLING

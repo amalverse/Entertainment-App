@@ -27,5 +27,8 @@ server/
 │
 ├── index.js # Express app config
 ├── server.js # Server entry point
+├── swagger.js # Swagger API documentation setup
 ├── .env
 └── package.json
+
+API documentation is available at: http://localhost:5000/api-docs (or your deployed backend URL when BACKEND_URL is set)

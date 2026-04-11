@@ -6,6 +6,7 @@ import MovieDetails from "../pages/MovieDeatils";
 import TvSeries from "../pages/TvSeries";
 import TVDetails from "../pages/TVDetalis";
 import Bookmarks from "../pages/Bookmarks";
+import Watched from "../pages/Watched";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import SearchResults from "../pages/SearchResults";
@@ -27,6 +28,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Bookmarks />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/watched"
+        element={
+          <ProtectedRoute>
+            <Watched />
           </ProtectedRoute>
         }
       />

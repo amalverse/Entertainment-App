@@ -53,6 +53,15 @@ const userSchema = new mongoose.Schema(
         poster: { type: String },
       },
     ],
+    watchedList: [
+      {
+        tmdbId: { type: Number },
+        type: { type: String }, // "movie" or "tv"
+        title: { type: String },
+        poster: { type: String },
+        watchedAt: { type: Date, default: Date.now },
+      },
+    ],
     isVerified: {
       type: Boolean,
       default: function () {

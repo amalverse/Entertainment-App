@@ -5,12 +5,15 @@ import {
   MdMovie,
   MdTv,
   MdBookmark,
+  MdCheckCircle,
   MdGridView,
   MdLogout,
   MdPerson,
 } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { logout } from "../../redux/features/auth/authSlice";
+import { clearBookmarks } from "../../redux/features/bookmarks/bookmarksSlice";
+import { clearWatched } from "../../redux/features/watched/watchedSlice";
 
 // Shared NavLink component for consistent styling
 function NavLink({ to, icon, label, active }) {
@@ -46,6 +49,8 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearBookmarks());
+    dispatch(clearWatched());
     setIsMenuOpen(false);
     navigate("/login");
   };
@@ -77,6 +82,12 @@ const Sidebar = () => {
           icon={MdBookmark}
           label="Bookmarks"
           active={isActive("/bookmarks")}
+        />
+        <NavLink
+          to="/watched"
+          icon={MdCheckCircle}
+          label="Watched"
+          active={isActive("/watched")}
         />
       </nav>
 

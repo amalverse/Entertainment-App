@@ -1,17 +1,38 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTVDetails } from "../redux/features/tv/tvSlice";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { 
+  addBookmark, 
+  removeBookmark 
+} from "../redux/features/bookmarks/bookmarksSlice";
+import { 
+  addWatched, 
+  removeWatched 
+} from "../redux/features/watched/watchedSlice";
 import getImageUrl from "../utils/getImageUrl";
 import TVCard from "../components/cards/TVCard";
-import { FaStar, FaGlobe, FaImdb } from "react-icons/fa";
+import { FaStar, FaGlobe, FaImdb, FaBookmark, FaRegBookmark, FaCheckCircle, FaRegCheckCircle } from "react-icons/fa";
 import Loader from "../components/common/Loader";
 
 // TV show details page
 const TVDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
   const { selectedTV: tv, loading } = useSelector((state) => state.tv);
+  const bookmarks = useSelector((state) => state.bookmarks.items);
+  const watchedList = useSelector((state) => state.watched.items);
+
+  const isBookmarked = bookmarks.some(
+    (b) => b.tmdbId === Number(id) && b.type === "tv"
+  );
+  const isWatched = watchedList.some(
+    (b) => b.tmdbId === Number(id) && b.type === "tv"
+  );
 
   useEffect(() => {
     dispatch(fetchTVDetails(id));
@@ -32,6 +53,42 @@ const TVDetails = () => {
     tv.recommendations?.results.length > 0
       ? tv.recommendations.results.slice(0, 10)
       : tv.similar?.results.slice(0, 10);
+
+  const handleBookmark = () => {
+    if (!isAuthenticated) return navigate("/login");
+    
+    if (isBookmarked) {
+      const bookmark = bookmarks.find(
+        (b) => b.tmdbId === Number(id) && b.type === "tv"
+      );
+      if (bookmark) dispatch(removeBookmark(bookmark._id));
+    } else {
+      dispatch(addBookmark({
+        tmdbId: tv.id,
+        type: "tv",
+        title: tv.name,
+        poster: tv.poster_path
+      }));
+    }
+  };
+
+  const handleWatched = () => {
+    if (!isAuthenticated) return navigate("/login");
+    
+    if (isWatched) {
+      const watched = watchedList.find(
+        (b) => b.tmdbId === Number(id) && b.type === "tv"
+      );
+      if (watched) dispatch(removeWatched(watched._id));
+    } else {
+      dispatch(addWatched({
+        tmdbId: tv.id,
+        type: "tv",
+        title: tv.name,
+        poster: tv.poster_path
+      }));
+    }
+  };
 
   return (
     <div className="bg-gray-900 min-h-screen text-white pb-20">
@@ -78,13 +135,39 @@ const TVDetails = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-6 mb-8">
+            <div className="flex flex-wrap items-center gap-4 mb-8">
               <div className="flex items-center gap-2 bg-gray-800/80 px-4 py-2 rounded-full">
                 <FaStar className="text-yellow-400" />
                 <span className="font-bold text-lg">
                   {tv.vote_average.toFixed(1)}
                 </span>
                 <span className="text-xs text-gray-400">/ 10</span>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleBookmark}
+                  className={`flex items-center gap-2 px-6 py-2 rounded-full font-semibold transition-all shadow-lg ${
+                    isBookmarked 
+                      ? "bg-red-600 text-white hover:bg-red-700" 
+                      : "bg-white text-black hover:bg-gray-200"
+                  }`}
+                >
+                  {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+                  {isBookmarked ? "Bookmarked" : "Bookmark"}
+                </button>
+
+                <button
+                  onClick={handleWatched}
+                  className={`flex items-center gap-2 px-6 py-2 rounded-full font-semibold transition-all shadow-lg ${
+                    isWatched 
+                      ? "bg-green-600 text-white hover:bg-green-700" 
+                      : "bg-gray-800 text-white hover:bg-gray-700 border border-gray-600"
+                  }`}
+                >
+                  {isWatched ? <FaCheckCircle /> : <FaRegCheckCircle />}
+                  {isWatched ? "Watched" : "Mark Watched"}
+                </button>
               </div>
             </div>
 

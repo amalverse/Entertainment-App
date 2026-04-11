@@ -1,11 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { MdBookmark, MdOutlineBookmarkAdd, MdMovie } from "react-icons/md";
+import { MdBookmark, MdOutlineBookmarkAdd, MdMovie, MdCheckCircle, MdOutlineCheckCircle } from "react-icons/md";
 import useAuth from "../../hooks/useAuth";
 import {
   addBookmark,
   removeBookmark,
 } from "../../redux/features/bookmarks/bookmarksSlice";
+import {
+  addWatched,
+  removeWatched,
+} from "../../redux/features/watched/watchedSlice";
 
 // Displays movie poster and info
 const MovieCard = ({ movie }) => {
@@ -13,8 +17,13 @@ const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const bookmarks = useSelector((state) => state.bookmarks.items);
+  const watchedList = useSelector((state) => state.watched.items);
 
-  const isAdded = bookmarks.some(
+  const isBookmarked = bookmarks.some(
+    (b) => b.tmdbId === movie.id && b.type === "movie",
+  );
+
+  const isWatched = watchedList.some(
     (b) => b.tmdbId === movie.id && b.type === "movie",
   );
 
@@ -27,7 +36,7 @@ const MovieCard = ({ movie }) => {
       return;
     }
 
-    if (isAdded) {
+    if (isBookmarked) {
       const bookmark = bookmarks.find(
         (b) => b.tmdbId === movie.id && b.type === "movie",
       );
@@ -35,6 +44,32 @@ const MovieCard = ({ movie }) => {
     } else {
       dispatch(
         addBookmark({
+          tmdbId: movie.id,
+          type: "movie",
+          title: movie.title,
+          poster: movie.poster_path,
+        }),
+      );
+    }
+  };
+
+  const watchedHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
+    if (isWatched) {
+      const watched = watchedList.find(
+        (b) => b.tmdbId === movie.id && b.type === "movie",
+      );
+      if (watched) dispatch(removeWatched(watched._id));
+    } else {
+      dispatch(
+        addWatched({
           tmdbId: movie.id,
           type: "movie",
           title: movie.title,
@@ -62,16 +97,38 @@ const MovieCard = ({ movie }) => {
           />
 
           {/* Bookmark Button Overlay */}
-          <button
-            onClick={bookmarkHandler}
-            className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-all duration-300 z-10"
-          >
-            {isAdded ? (
-              <MdBookmark className="text-lg" />
-            ) : (
-              <MdOutlineBookmarkAdd className="text-lg" />
-            )}
-          </button>
+          <div className="absolute top-2 right-2 flex flex-col gap-2 z-10">
+            <button
+              onClick={bookmarkHandler}
+              className={`p-2 rounded-full transition-all duration-300 ${
+                isBookmarked 
+                  ? "bg-red-600 text-white" 
+                  : "bg-black/50 text-white hover:bg-white hover:text-black"
+              }`}
+              title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
+            >
+              {isBookmarked ? (
+                <MdBookmark className="text-lg" />
+              ) : (
+                <MdOutlineBookmarkAdd className="text-lg" />
+              )}
+            </button>
+            <button
+              onClick={watchedHandler}
+              className={`p-2 rounded-full transition-all duration-300 ${
+                isWatched 
+                  ? "bg-green-600 text-white" 
+                  : "bg-black/50 text-white hover:bg-white hover:text-black"
+              }`}
+              title={isWatched ? "Unmark as Watched" : "Mark as Watched"}
+            >
+              {isWatched ? (
+                <MdCheckCircle className="text-lg" />
+              ) : (
+                <MdOutlineCheckCircle className="text-lg" />
+              )}
+            </button>
+          </div>
         </div>
       </Link>
 
