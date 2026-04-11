@@ -20,11 +20,11 @@ const MovieCard = ({ movie }) => {
   const watchedList = useSelector((state) => state.watched.items);
 
   const isBookmarked = bookmarks.some(
-    (b) => b.tmdbId === movie.id && b.type === "movie",
+    (b) => Number(b.tmdbId) === Number(movie.id) && b.type === "movie",
   );
 
   const isWatched = watchedList.some(
-    (b) => b.tmdbId === movie.id && b.type === "movie",
+    (b) => Number(b.tmdbId) === Number(movie.id) && b.type === "movie",
   );
 
   const bookmarkHandler = (e) => {

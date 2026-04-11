@@ -19,8 +19,8 @@ const TVCard = ({ tv }) => {
   const bookmarks = useSelector((state) => state.bookmarks.items);
   const watchedList = useSelector((state) => state.watched.items);
 
-  const isBookmarked = bookmarks.some((b) => b.tmdbId === tv.id && b.type === "tv");
-  const isWatched = watchedList.some((b) => b.tmdbId === tv.id && b.type === "tv");
+  const isBookmarked = bookmarks.some((b) => Number(b.tmdbId) === Number(tv.id) && b.type === "tv");
+  const isWatched = watchedList.some((b) => Number(b.tmdbId) === Number(tv.id) && b.type === "tv");
 
   const bookmarkHandler = (e) => {
     e.preventDefault();

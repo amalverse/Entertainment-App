@@ -5,12 +5,18 @@ import {
   MdOutlineBookmarkAdd,
   MdMovie,
   MdTv,
+  MdCheckCircle,
+  MdOutlineCheckCircle,
 } from "react-icons/md";
 import useAuth from "../../hooks/useAuth";
 import {
   addBookmark,
   removeBookmark,
 } from "../../redux/features/bookmarks/bookmarksSlice";
+import {
+  addWatched,
+  removeWatched,
+} from "../../redux/features/watched/watchedSlice";
 
 // Large landscape card for trending carousel
 const TrendingCard = ({ item, type }) => {
@@ -18,8 +24,13 @@ const TrendingCard = ({ item, type }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const bookmarks = useSelector((state) => state.bookmarks.items);
+  const watchedList = useSelector((state) => state.watched.items);
 
-  const isAdded = bookmarks.some(
+  const isBookmarked = bookmarks.some(
+    (b) => b.tmdbId === item.id && b.type === type,
+  );
+
+  const isWatched = watchedList.some(
     (b) => b.tmdbId === item.id && b.type === type,
   );
 
@@ -32,7 +43,7 @@ const TrendingCard = ({ item, type }) => {
       return;
     }
 
-    if (isAdded) {
+    if (isBookmarked) {
       const bookmark = bookmarks.find(
         (b) => b.tmdbId === item.id && b.type === type,
       );
@@ -40,6 +51,32 @@ const TrendingCard = ({ item, type }) => {
     } else {
       dispatch(
         addBookmark({
+          tmdbId: item.id,
+          type,
+          title: item.title || item.name,
+          poster: item.poster_path,
+        }),
+      );
+    }
+  };
+
+  const watchedHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
+    if (isWatched) {
+      const watched = watchedList.find(
+        (b) => b.tmdbId === item.id && b.type === type,
+      );
+      if (watched) dispatch(removeWatched(watched._id));
+    } else {
+      dispatch(
+        addWatched({
           tmdbId: item.id,
           type,
           title: item.title || item.name,
@@ -83,17 +120,39 @@ const TrendingCard = ({ item, type }) => {
           </h3>
         </div>
 
-        {/* Bookmark Button */}
-        <button
-          onClick={bookmarkHandler}
-          className="absolute top-2 right-2 md:top-4 md:right-4 p-2 md:p-3 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-all duration-300"
-        >
-          {isAdded ? (
-            <MdBookmark className="text-xl" />
-          ) : (
-            <MdOutlineBookmarkAdd className="text-xl" />
-          )}
-        </button>
+        {/* Action Buttons */}
+        <div className="absolute top-2 right-2 md:top-4 md:right-4 flex flex-col gap-2 z-10">
+          <button
+            onClick={bookmarkHandler}
+            className={`p-2 md:p-3 rounded-full transition-all duration-300 ${
+              isBookmarked 
+                ? "bg-red-600 text-white" 
+                : "bg-black/50 text-white hover:bg-white hover:text-black"
+            }`}
+            title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
+          >
+            {isBookmarked ? (
+              <MdBookmark className="text-xl" />
+            ) : (
+              <MdOutlineBookmarkAdd className="text-xl" />
+            )}
+          </button>
+          <button
+            onClick={watchedHandler}
+            className={`p-2 md:p-3 rounded-full transition-all duration-300 ${
+              isWatched 
+                ? "bg-green-600 text-white" 
+                : "bg-black/50 text-white hover:bg-white hover:text-black"
+            }`}
+            title={isWatched ? "Unmark as Watched" : "Mark as Watched"}
+          >
+            {isWatched ? (
+              <MdCheckCircle className="text-xl" />
+            ) : (
+              <MdOutlineCheckCircle className="text-xl" />
+            )}
+          </button>
+        </div>
       </Link>
     </div>
   );

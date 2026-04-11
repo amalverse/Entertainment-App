@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { restoreAuth } from "./redux/features/auth/authSlice";
 import { fetchWatched } from "./redux/features/watched/watchedSlice";
@@ -16,16 +16,21 @@ const App = () => {
   const location = useLocation();
   const scrollRef = useRef(null);
 
-  // Keep user logged in on refresh
+  const { user, token } = useSelector((state) => state.auth);
+
+  // Sync auth state and fetch user data on load or login
   useEffect(() => {
-    dispatch(restoreAuth());
+    // 1. If not in Redux yet, try to restore from localStorage
+    if (!token) {
+      dispatch(restoreAuth());
+    }
     
-    // If we have a token, fetch user-specific data
-    if (localStorage.getItem("token")) {
+    // 2. If we have authentication, fetch user data
+    if (token) {
       dispatch(fetchWatched());
       dispatch(fetchBookmarks());
     }
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   // Reset scroll to top when changing pages
   useEffect(() => {
