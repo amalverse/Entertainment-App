@@ -94,8 +94,4 @@ flowchart TD
 - `UserController` uses `AuthMiddleware` to protect profile read/update/delete operations.
 - All protected routes read/write the same `User` document.
 
-## Exporting to PDF
 
-1. Open this Markdown file in a Markdown editor that supports Mermaid (VS Code with Mermaid Preview, Typora, Obsidian).
-2. Render the diagram.
-3. Export or print to PDF from the editor.
