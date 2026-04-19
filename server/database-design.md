@@ -57,14 +57,14 @@ erDiagram
 flowchart TD
     Client -->|POST /api/auth/register| AuthController[Auth Controller]
     Client -->|POST /api/auth/login| AuthController
-    Client -->|GET /api/auth/verify/{token}| AuthController
+    Client -->|GET /api/auth/verify/:token| AuthController
     Client -->|POST /api/auth/forgot-password| AuthController
-    Client -->|POST /api/auth/reset-password/{token}| AuthController
+    Client -->|POST /api/auth/reset-password/:token| AuthController
     Client -->|POST /api/auth/google| AuthController
 
     Client -->|GET /api/bookmarks| BookmarkController[Bookmark Controller]
     Client -->|POST /api/bookmarks| BookmarkController
-    Client -->|DELETE /api/bookmarks/{id}| BookmarkController
+    Client -->|DELETE /api/bookmarks/:id| BookmarkController
 
     Client -->|GET /api/user/profile| UserController[User Controller]
     Client -->|PUT /api/user/profile| UserController
